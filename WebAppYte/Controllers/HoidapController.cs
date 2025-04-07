@@ -111,11 +111,11 @@ namespace WebAppYte.Controllers
 				return RedirectToAction("Index", "Hoidap", new { id = hoiDap.mabn });
 			}
 			var username = User.Identity.Name;
-			using (var db = new modelWeb())
-			{
-				var currentUser = db.BenhNhans.FirstOrDefault(b => b.mabn.ToString() == username || (b.TenDangNhap != null && b.TenDangNhap == username));
-				ViewBag.CurrentUser = currentUser;
-			}
+			//using (var db = new modelWeb())
+			//{
+			//	var currentUser = db.BenhNhans.FirstOrDefault(b => b.mabn.ToString() == username || (b.TenDangNhap != null && b.TenDangNhap == username));
+			//	ViewBag.CurrentUser = currentUser;
+			//}
 
 			return View(hoiDap);
 		}
