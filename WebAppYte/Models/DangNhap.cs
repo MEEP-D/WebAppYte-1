@@ -21,5 +21,7 @@ namespace WebAppYte.Models
         public int? quyen { get; set; }
 
         public int? mand { get; set; }
-    }
+
+		
+	}
 }

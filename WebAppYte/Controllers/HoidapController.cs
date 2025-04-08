@@ -91,16 +91,24 @@ namespace WebAppYte.Controllers
 		// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Create([Bind(Include = "ma,hoi,ngayhoi,ngaytl,dap,mabn,trangthai")] HoiDap hoiDap)
+		public ActionResult Create(HoiDap hoiDap)
 		{
 			if (ModelState.IsValid)
 			{
-				// Kiểm tra xem mabn có hợp lệ không
-				if (hoiDap.mabn <= 0)
-				{
-					ModelState.AddModelError("", "Thông tin người dùng không hợp lệ");
-					return View(hoiDap);
-				}
+				string tendn = Session["tendn"] as string;
+
+				var nguoiDung = db.NguoiDungs.FirstOrDefault(nd => nd.tendn == tendn);
+
+				//if (nguoiDung != null)
+				//{
+				//	hoiDap.mand = nguoiDung.mand;
+
+				//	var benhNhan = db.BenhNhans.FirstOrDefault(bn => bn.mand == nguoiDung.mand);
+				//	if (benhNhan != null)
+				//	{
+				//		hoiDap.mabn = benhNhan.ma;
+				//	}
+				//}
 
 				hoiDap.ngayhoi = DateTime.Now;
 				hoiDap.trangthai = 0;
@@ -108,17 +116,13 @@ namespace WebAppYte.Controllers
 				db.HoiDaps.Add(hoiDap);
 				db.SaveChanges();
 
-				return RedirectToAction("Index", "Hoidap", new { id = hoiDap.mabn });
+				return RedirectToAction("Index");
 			}
-			var username = User.Identity.Name;
-			//using (var db = new modelWeb())
-			//{
-			//	var currentUser = db.BenhNhans.FirstOrDefault(b => b.mabn.ToString() == username || (b.TenDangNhap != null && b.TenDangNhap == username));
-			//	ViewBag.CurrentUser = currentUser;
-			//}
 
 			return View(hoiDap);
 		}
+
+
 
 		// GET: Hoidap/Edit/5
 		public ActionResult Edit(int? id)

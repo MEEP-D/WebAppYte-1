@@ -9,7 +9,7 @@
 
     // Khai báo dbContext
     var db = new modelWeb();
-    var currentUser = db.BenhNhans.FirstOrDefault(b => b.mabn.ToString() == username || (b.TenDangNhap != null && b.TenDangNhap == username));
+    var currentUser = db.BenhNhans.FirstOrDefault(b => b.mabn.ToString() == username || (b.tendn != null && b.tendn == username));
 }
 
 <style type="text/css">
@@ -96,13 +96,7 @@
     <script>
         $(document).ready(function() {
             // Kiểm tra nếu chưa đăng nhập
-            @if (!User.Identity.IsAuthenticated)
-            {
-                <text>
-                alert('Vui lòng đăng nhập để đặt câu hỏi!');
-                window.location.href = '@Url.Action("Login", "Account")';
-                </text>
-            }
+           
 
             // Tự động thêm ngày hỏi là ngày hiện tại
             $('form').submit(function() {

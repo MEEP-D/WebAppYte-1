@@ -211,6 +211,10 @@
     <Compile Include="Migrations\202412031731519_firstmigration.designer.cs">
       <DependentUpon>202412031731519_firstmigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202504080304522_BenhNhan.cs" />
+    <Compile Include="Migrations\202504080304522_BenhNhan.Designer.cs">
+      <DependentUpon>202504080304522_BenhNhan.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BaiViet.cs" />
     <Compile Include="Models\BenhAn.cs" />
@@ -2488,6 +2492,10 @@
     <Content Include="Views\Lichkham\NhapTTDK.cshtml" />
     <Content Include="Views\Lichkham\Delete.cshtml" />
     <Content Include="Views\Home\Gioithieu.cshtml" />
+    <Content Include="Views\Home\DatLaiMatKhau.cshtml" />
+    <Content Include="Views\Home\DatLaiMatKhauThanhCong.cshtml" />
+    <Content Include="Views\Home\LienKetKhongHopLe.cshtml" />
+    <Content Include="Views\Home\QuenMatKhau.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2509,6 +2517,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202412031731519_firstmigration.resx">
       <DependentUpon>202412031731519_firstmigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202504080304522_BenhNhan.resx">
+      <DependentUpon>202504080304522_BenhNhan.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
