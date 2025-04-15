@@ -146,15 +146,22 @@
                         <br />
                         <div class="el-form-item">
                             <div class="el-form-item__content">
-                                <div class="gia-scheduler el-input el-input--prefix" style="margin-left:15px">
-                                    <div class="gia-scheduler__input el-input__inner">
-                                        <span class="el-input__prefix">
-                                            <i class="el-input__icon bx bx-calendar"></i>
-                                            <select name="ngaykham" style="width:470px;" class="form-control" onchange="this.form.submit()">
-                                                <option value="" selected disabled style="color:gray;">Chọn ngày khám</option>
+                                <div data-v-80145740="" class="gia-scheduler el-input el-input--prefix" style="margin-left:15px">
+                                    <div data-v-80145740="" class="gia-scheduler__input el-input__inner">
+                                        <span data-v-80145740="" class="el-input__prefix">
+                                            <i data-v-80145740="" class="el-input__icon bx bx-calendar"></i>
+                                            <select name="ngaykham" style="width:470px;" @*onchange="this.form.submit()"*@>
+                                                <option value="" selected disabled style="color:gray;">Chọn ngày khám </option>
                                                 @foreach (var item in ViewBag.ngaykham)
                                                 {
-                                                    <option value="@item" @(item == ViewBag.nk ? "selected" : "")>@item</option>
+                                                    if (item == ViewBag.nk)
+                                                    {
+                                                        <option value="@item" selected>@item</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item">@item</option>
+                                                    }
                                                 }
                                             </select>
                                         </span>
@@ -162,7 +169,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <br />
                         <div class="el-form-item">
                             <div class="el-form-item__content">
@@ -200,16 +206,15 @@
                         </div>
                     </div>
                     <br />
-                    <button name="datlich" type="button" class="el-button expanded el-button--primary" style="background: #1f28af;width: 470px; height:100%;color:white; margin-left:15px;" @*onchange="this.form.submit()"*@>
-                        <a><span>ĐẶT LỊCH KHÁM →</span></a>
-                    </button>
+                        <button type="submit" class="btn-submit">ĐẶT LỊCH KHÁM →</button>
+
                 </div>
                 <div class="el-loading-mask" style="display: none;">
                     <div class="el-loading-spinner"><svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg><!----></div>
                 </div>
             </div>}
     </div>
-    
+
     //chon khoa xong se lay cac bac si ra
     <script>
         $('select[name=khoa]').change(function () {
@@ -236,7 +241,7 @@
                 }
             });
         });
-        
+
     </script>
     //chon bac si xong, lay ngay kham ra
     <script>
@@ -314,56 +319,54 @@
     </script>
     <script>
         $(document).ready(function () {
-            $('button[name="datlich"]').click(function () {
-                // Lấy giá trị từ các trường
-                var chinhanh = $('input[name=chinhanh]:checked').val(); // Lấy giá trị radio chinhanh
-                var hinhthuc = $('input[name=hinhthuc]:checked').val(); // Lấy giá trị radio hinhthuc
-                var khoa = $('select[name=khoa]').val(); // Lấy giá trị select khoa
-                var bacsi = $('select[name=bacsi]').val(); // Lấy giá trị select bác sĩ
-                var ngaykham = $('select[name=ngaykham]').val(); // Lấy giá trị select ngày khám
-                var cakham = $('select[name=cakham]').val(); // Lấy giá trị select ca khám
-                var mota = $('textarea[name=mota]').val(); // Lấy mô tả
+            $('#bookingForm').submit(function (e) {
+                e.preventDefault(); // Ngăn reload form
 
-                // Kiểm tra dữ liệu đầu vào
-                if (!chinhanh || !khoa || !bacsi || !ngaykham || !cakham || !mota) {
+                // Lấy token AntiForgery
+                var token = $('input[name="__RequestVerificationToken"]').val();
+
+                // Lấy dữ liệu
+                var data = {
+                    __RequestVerificationToken: token,
+                    chinhanh: $('input[name="chinhanh"]:checked').val(),
+                    hinhthuc: $('input[name="hinhthuc"]:checked').val(),
+                    khoa: $('select[name="khoa"]').val(),
+                    bacsi: $('select[name="bacsi"]').val(),
+                    ngaykham: $('select[name="ngaykham"]').val(),
+                    cakham: $('select[name="cakham"]').val(),
+                    mota: $('textarea[name="mota"]').val()
+                };
+
+                // Kiểm tra dữ liệu trước khi gửi
+                if (!data.chinhanh || !data.hinhthuc || !data.khoa || !data.bacsi || !data.ngaykham || !data.cakham || !data.mota) {
                     alert("Vui lòng nhập đầy đủ thông tin!");
                     return;
                 }
 
-                // Tạo dữ liệu để gửi
-                var data = {
-                    chinhanh: chinhanh,
-                    hinhthuc: hinhthuc,
-                    khoa: khoa,
-                    bacsi: bacsi,
-                    ngaykham: ngaykham,
-                    cakham: cakham,
-                    mota: mota
-                };
-
-                // Gửi dữ liệu qua AJAX
+                // Gửi AJAX
                 $.ajax({
-                    url: "/Lichkham/ActionPostData", // URL của hàm POST trên server
+                    url: "/LichKham/ActionPostData",
                     type: "POST",
-                    contentType: "application/json", // Định dạng JSON
-                    data: JSON.stringify(data), // Chuyển dữ liệu thành chuỗi JSON
+                    data: data,
                     success: function (response) {
                         if (response.success) {
-                            alert("Đã post lên cho actionpostdata");
-                            // Có thể thêm logic chuyển trang hoặc reset form ở đây
+                            alert("Đặt lịch khám thành công!");
+                            // reset form nếu cần:
+                            $('#bookingForm')[0].reset();
                         } else {
-                            alert("Lưu thành công! " + response.message);
+                            alert("Đã gửi nhưng có lỗi: " + response.message);
                         }
                     },
                     error: function (xhr, status, error) {
-                        console.error("Lỗi khi gửi dữ liệu:", error);
-                        alert("Có lỗi xảy ra. Vui lòng thử lại11!");
+                        console.error("Lỗi gửi:", error);
+                        alert("Có lỗi xảy ra. Vui lòng thử lại!");
                     }
                 });
             });
         });
 
     </script>
+
 }
 else
 {
@@ -505,7 +508,7 @@ else
                             </div>
                         </div>
                         <br />
-                      
+
                         <form action="">
                             <div class="el-form-item">
                                 <!---->
@@ -538,7 +541,7 @@ else
                                     </div><!---->
                                 </div>
                             </div><!---->
-                            
+
                             <br />
                             <div class="el-form-item">
                                 <!---->
@@ -582,21 +585,21 @@ else
                             </div><!---->
                         </div>
                     </div>
-                    
+
                     <br />
                     <button name="datlich" type="button" class="el-button expanded el-button--primary" style="background: #1f28af;width: 470px; height:100%;color:white; margin-left:15px;" @*onchange="this.form.submit()"*@>
 
                         <a><span>ĐẶT LỊCH KHÁM →</span></a>
                     </button>
 
-                    
+
 
 
                 </div>
                 <div class="el-loading-mask" style="display: none;">
                     <div class="el-loading-spinner"><svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg><!----></div>
                 </div>
-               
+
 
             </div>}
 

@@ -32,6 +32,7 @@ namespace WebAppYte.Models
 
         public int? mabn { get; set; }
 
-        public virtual CaKham CaKham { get; set; }
+		[ForeignKey("maca")]
+		public virtual CaKham CaKham { get; set; }
     }
 }
